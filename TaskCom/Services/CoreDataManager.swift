@@ -62,47 +62,29 @@ class CoreDataManager {
     
     func update(_ task: Task) {
         // 1. Создаём запрос поиска по id
-        let request = NSFetchRequest<TaskEntity>(entityName: "TaskEntity")
-        request.predicate = NSPredicate(format: "id == %@", task.id as CVarArg)
-        
-        do {
-            let results = try container.viewContext.fetch(request)
-            
-            // 2. Берём первый результат (id уникален)
-            guard let entity = results.first else {
-                print("⚠️ Задача с id \(task.id) не найдена")
-                return
-            }
-            
-            // 3. Обновляем поля
-            entity.title = task.title
-            entity.taskDescription = task.taskDescription
-            entity.priorityRaw = Int16(task.priority.rawValue)
-            entity.isCompleted = task.isCompleted
-            entity.dueDate = task.dueDate
-            entity.completedAt = task.completedAt
-            
-            // 4. Сохраняем
-            saveContext()
-        } catch {
-            print("Ошибка поиска: \(error)")
+        // 2. Берём первый результат (id уникален)
+        guard let entity = findEntity(by: task.id) else {
+            print("⚠️ Задача с id \(task.id) не найдена")
+            return
         }
+        
+        // 3. Обновляем поля
+        entity.title = task.title
+        entity.taskDescription = task.taskDescription
+        entity.priorityRaw = Int16(task.priority.rawValue)
+        entity.isCompleted = task.isCompleted
+        entity.dueDate = task.dueDate
+        entity.completedAt = task.completedAt
+        
+        // 4. Сохраняем
+        saveContext()
+        
     }
     
     func delete(_ task: Task) {
-        let request = NSFetchRequest<TaskEntity>(entityName: "TaskEntity")
-        request.predicate = NSPredicate(format: "id == %@", task.id as CVarArg)
-        
-        do {
-            let results = try container.viewContext.fetch(request)
-            
-            if let entity = results.first {
-                container.viewContext.delete(entity)
-                saveContext()
-            }
-        } catch {
-            print("Ошибка удаления: \(error)")
-        }
+        guard let entity = findEntity(by: task.id) else { return }
+        container.viewContext.delete(entity)
+        saveContext()
     }
     
     private func convertToTask(from entity: TaskEntity) -> Task {
@@ -121,6 +103,11 @@ class CoreDataManager {
         } catch {
             print("Ошибка сохранения: \(error)")
         }
+    }
+    private func findEntity(by id: UUID) -> TaskEntity? {
+        let request = NSFetchRequest<TaskEntity>(entityName: "TaskEntity")
+        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        return try? container.viewContext.fetch(request).first
     }
 }
 
