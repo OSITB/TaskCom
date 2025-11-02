@@ -60,6 +60,35 @@ class CoreDataManager {
         saveContext()
     }
     
+    func update(_ task: Task) {
+        // 1. Создаём запрос поиска по id
+        let request = NSFetchRequest<TaskEntity>(entityName: "TaskEntity")
+        request.predicate = NSPredicate(format: "id == %@", task.id as CVarArg)
+        
+        do {
+            let results = try container.viewContext.fetch(request)
+            
+            // 2. Берём первый результат (id уникален)
+            guard let entity = results.first else {
+                print("⚠️ Задача с id \(task.id) не найдена")
+                return
+            }
+            
+            // 3. Обновляем поля
+            entity.title = task.title
+            entity.taskDescription = task.taskDescription
+            entity.priorityRaw = Int16(task.priority.rawValue)
+            entity.isCompleted = task.isCompleted
+            entity.dueDate = task.dueDate
+            entity.completedAt = task.completedAt
+            
+            // 4. Сохраняем
+            saveContext()
+        } catch {
+            print("Ошибка поиска: \(error)")
+        }
+    }
+    
     private func convertToTask(from entity: TaskEntity) -> Task {
         return Task(id: entity.id ?? UUID(),
                     title: entity.title ?? "Без названия",
