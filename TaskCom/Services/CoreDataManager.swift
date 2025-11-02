@@ -89,6 +89,22 @@ class CoreDataManager {
         }
     }
     
+    func delete(_ task: Task) {
+        let request = NSFetchRequest<TaskEntity>(entityName: "TaskEntity")
+        request.predicate = NSPredicate(format: "id == %@", task.id as CVarArg)
+        
+        do {
+            let results = try container.viewContext.fetch(request)
+            
+            if let entity = results.first {
+                container.viewContext.delete(entity)
+                saveContext()
+            }
+        } catch {
+            print("Ошибка удаления: \(error)")
+        }
+    }
+    
     private func convertToTask(from entity: TaskEntity) -> Task {
         return Task(id: entity.id ?? UUID(),
                     title: entity.title ?? "Без названия",
