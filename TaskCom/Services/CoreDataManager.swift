@@ -25,7 +25,7 @@ class CoreDataManager {
         
     }
     
-    func fetchTask() -> [Task] {
+    func fetchTasks() -> [Task] {
             // 1. Создаём запрос к базе данных
             let request = NSFetchRequest<TaskEntity>(entityName: "TaskEntity")
         // 2. Выполняем запрос
