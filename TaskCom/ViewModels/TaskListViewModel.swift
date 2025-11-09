@@ -8,14 +8,38 @@
 import Foundation
 import Combine
 
+enum TaskFilter: String, CaseIterable {
+    case all = "Все"
+    case active = "Активные"
+    case completed = "Выполненные"
+}
+
 class TaskListViewModel: ObservableObject {
     
     @Published var tasks: [Task] = []
+    @Published var selectedFilter: TaskFilter = .all
+    @Published var sortOption: SortOption = .createdDate
     
     private let coreDataManager = CoreDataManager.shared
     
     init() {
         loadTask()
+    }
+    
+    // Computed property для фильтрации
+    var filteredTasks: [Task] {
+        let filtered: [Task]
+        
+        switch selectedFilter {
+        case .all:
+            filtered = tasks
+        case .active:
+            filtered = tasks.filter { !$0.isCompleted }
+        case .completed:
+            filtered = tasks.filter { $0.isCompleted }
+        }
+        
+        return sortTasks(filtered)
     }
     
     func loadTask() {
