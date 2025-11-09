@@ -14,6 +14,13 @@ enum TaskFilter: String, CaseIterable {
     case completed = "Выполненные"
 }
 
+enum SortOption {
+    case createdDate    // По дате создания
+    case dueDate    // По дедлайну
+    case priority   // По приоритету
+    case title  // По алфавиту
+}
+
 class TaskListViewModel: ObservableObject {
     
     @Published var tasks: [Task] = []
@@ -82,4 +89,26 @@ class TaskListViewModel: ObservableObject {
         }
     }
     
+    private func sortTasks(_ tasks: [Task]) -> [Task] {
+        switch sortOption {
+        case .createdDate:
+            return tasks.sorted { $0.createdAt > $1.createdAt}
+        case .dueDate:
+            return tasks.sorted { task1, task2 in
+                switch (task1.dueDate, task2.dueDate) {
+                case (nil, nil):
+                    return task1.createdAt < task2.createdAt
+                case (nil, _):
+                    return false
+                case (_, nil):
+                    return true
+                case (let date1?, let date2?):
+                    return date1 < date2
+                }}
+        case .priority:
+            return tasks.sorted { $0.priority.rawValue > $1.priority.rawValue}
+        case .title:
+            return tasks.sorted { $0.title < $1.title}
+        }
+    }
 }
