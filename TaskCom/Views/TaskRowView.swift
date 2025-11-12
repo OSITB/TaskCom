@@ -10,7 +10,9 @@ import SwiftUI
 struct TaskRowView: View {
     let task: Task
     let onToggle: () -> Void
+    
     var body: some View {
+        
         HStack(spacing: 12) {
             // Левая часть: название + описание
             VStack(alignment: .leading, spacing: 4) {
