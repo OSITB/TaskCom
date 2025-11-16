@@ -26,27 +26,32 @@ struct TaskRowView: View {
                         .lineLimit(1)
                 }
             }
-        }
-        Spacer()
-        
-        // Правая часть: приоритет + дедлайн + чекбокс
-        HStack(spacing: 12) {
-            // Индикатор приоритета
-            Circle()
-                .fill(priorityColor(task.priority))
-                .frame(width: 12, height: 12)
             
-            // Дедлайн
-            if let dueDate = task.dueDate {
-                Text(formatData(dueDate))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
+            Spacer()
             
-            // Чекбокс
-            Button(action: onToggle) {
-                Image(systemName: task.isCompleted ? "checkmark.circle.fill" : "cirle")
-                    .foregroundStyle(task.isCompleted ? .green : .gray)
+            // Правая часть: приоритет + дедлайн + чекбокс
+            HStack(spacing: 12) {
+                // Индикатор приоритета
+                Circle()
+                    .fill(priorityColor(task.priority))
+                    .frame(width: 12, height: 12)
+                
+                // Дедлайн
+                if let dueDate = task.dueDate {
+                    Text(formatData(dueDate))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                
+                // Чекбокс
+                Button(action: {
+                    withAnimation(.spring(response: 0.3)) {
+                        onToggle()
+                    }
+                } ) {
+                    Image(systemName: task.isCompleted ? "checkmark.circle.fill" : "circle")
+                        .foregroundStyle(task.isCompleted ? .green : .gray)
+                }
             }
         }
         .padding(.vertical, 8)

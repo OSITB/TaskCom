@@ -19,20 +19,21 @@ struct TaskListView: View {
                     taskList
                 }
             }
-        }
-        .navigationTitle("Задачи")
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button {
-                    showingAddTask = true
-                } label: {
-                    Image(systemName: "plus")
+            .navigationTitle("Задачи")
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        showingAddTask = true
+                    } label: {
+                        Image(systemName: "plus")
+                    }
                 }
             }
+            .sheet(isPresented: $showingAddTask) {
+                AddTaskView(viewModel: viewModel)
+            }
         }
-        .sheet(isPresented: $showingAddTask) {
-            AddTaskView(viewModel: viewModel)
-        }
+        
     }
     private var taskList: some View {
         List {
@@ -41,25 +42,33 @@ struct TaskListView: View {
                 ForEach(TaskFilter.allCases, id: \.self) { filter in
                     Text(filter.rawValue).tag(filter)}
             }
-        }
-        .pickerStyle(.segmented)
-        .listRowSeparator(.hidden)
-        
+            
+            .pickerStyle(.segmented)
+            .listStyle(.insetGrouped)
+            .listRowSeparator(.hidden)
+            
             // Список задач
-        return ForEach(viewModel.filteredTasks) { task in
-            TaskRowView(task: task) {
-                viewModel.toggleCompletion(for: task)
+            ForEach(viewModel.filteredTasks) { task in
+                TaskRowView(task: task) {
+                    viewModel.toggleCompletion(for: task)
+                }.swipeActions(edge: .trailing) {
+                    Button(role: .destructive) {
+                        viewModel.deleteTask(task)
+                    } label: {
+                        Label("Удалить", systemImage: "trash")
+                    }
+                }
             }
+            
         }
-        .onDelete(perform: deleteTask)
     }
-    
-    private func deleteTask(at offsets: IndexSet) {
-        offsets.forEach { index in
-            let task = viewModel.filteredTasks[index]
-            viewModel.deleteTask(task)}
+        private func deleteTask(at offsets: IndexSet) {
+            offsets.forEach { index in
+                let task = viewModel.filteredTasks[index]
+                viewModel.deleteTask(task)}
+        }
     }
-}
+
 
 
 #Preview {
