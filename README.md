@@ -5,7 +5,7 @@ A minimalist task tracker with priorities and filters, inspired by Things 3.
 ![Swift](https://img.shields.io/badge/Swift-5.9-orange.svg)
 ![iOS](https://img.shields.io/badge/iOS-26.0+-blue.svg)
 ![Architecture](https://img.shields.io/badge/Architecture-MVVM-green.svg)
-
+🇷🇺 [Russian version](readme-ru.md)
 ## Screenshots
 <p align="center">
   <img src="screenshots/emptyList.png" width="200" />
