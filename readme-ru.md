@@ -80,7 +80,7 @@ View ← ViewModel ← CoreDataManager ← CoreData
 
 1. Клонируйте репозиторий
 ```bash
-git clone https://github.com/yourusername/TaskCom.git
+git clone https://github.com/OSITB/TaskCom.git
 ```
 
 2. Откройте в Xcode
