@@ -5,19 +5,20 @@
 ![Swift](https://img.shields.io/badge/Swift-5.9-orange.svg)
 ![iOS](https://img.shields.io/badge/iOS-26.0+-blue.svg)
 ![Architecture](https://img.shields.io/badge/Architecture-MVVM-green.svg)
+![Status](https://img.shields.io/badge/Status-Active%20Development-brightgreen.svg)
 
 🇬🇧 [English version](README.md)
 
 ## Скриншоты
 
 <p align="center">
-  <img src="screenshots/emptyList.png" width="200" />
-  <img src="screenshots/mainScreen.png" width="200" />
-  <img src="screenshots/filter.png" width="200" />
-  <img src="screenshots/activeTasks.png" width="200" />
-  <img src="screenshots/addTask.png" width="200" />
-  <img src="screenshots/addTaskWithFill.png" width="200" />
-  <img src="screenshots/doneTasks.png" width="200" />
+  <img src="screenshots/emptyList.png" width="250" />
+  <img src="screenshots/mainScreen.png" width="250" />
+  <img src="screenshots/filter.png" width="250" />
+  <img src="screenshots/activeTasks.png" width="250" />
+  <img src="screenshots/addTask.png" width="250" />
+  <img src="screenshots/addTaskWithFill.png" width="250" />
+  <img src="screenshots/doneTasks.png" width="250" />
 </p>
 
 | Список задач | Добавление | Фильтры |
